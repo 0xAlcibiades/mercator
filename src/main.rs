@@ -1,7 +1,7 @@
 use yew::prelude::*;
 
-#[function_component]
-fn App() -> Html {
+#[function_component(Content)]
+fn content() -> HtmlResult {
     let counter = use_state_eq(|| 0);
     let onclick = {
         let counter = counter.clone();
@@ -11,13 +11,23 @@ fn App() -> Html {
         }
     };
 
-    // This draws a div with a button and then a reference to teh counter
-    html! {
+    Ok(html! {
         <div>
             // This calls the onclick function
             <button {onclick}>{ "+1" }</button>
             <p>{ *counter }</p>
         </div>
+    })
+}
+
+#[function_component]
+fn App() -> Html {
+    let fallback = html! {<div>{"Loading..."}</div>};
+
+    html! {
+        <Suspense {fallback}>
+            <Content />
+        </Suspense>
     }
 }
 
